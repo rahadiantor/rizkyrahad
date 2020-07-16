@@ -48,6 +48,7 @@ export default class Site extends App {
            */}
           <EditLink cms={this.cms} />
           <Component {...pageProps} />
+          <pre>{JSON.stringify(this.cms, null, 2)}</pre>
         </TinacmsGithubProvider>
       </TinaProvider>
     );
