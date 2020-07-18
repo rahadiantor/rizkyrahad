@@ -6,6 +6,7 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import { usePlugin } from "tinacms";
 import { useGithubJsonForm } from "react-tinacms-github";
+import { getPublicPath } from "../util/getPaths";
 
 export default function Narrative({ file }) {
   const formOptions = {
@@ -15,6 +16,12 @@ export default function Narrative({ file }) {
       { name: "slug", component: "text" },
       { name: "description", component: "textarea" },
       { name: "role", component: "text" },
+      {
+        name: "thumbnail",
+        component: "image",
+        uploadDir: () => getPublicPath(),
+        parse: (fileName) => getPublicPath(fileName),
+      },
     ],
   };
 
