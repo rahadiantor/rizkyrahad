@@ -1,11 +1,8 @@
-import { join } from "path";
-
-import getConfig from "next/config";
-const { serverRuntimeConfig } = getConfig();
+import { join, resolve } from "path";
 
 // `public/narrative/`
 export const getPublicPath = (...dirs: string[]) =>
-  join(serverRuntimeConfig.PROJECT_ROOT, "public", ...dirs);
+  resolve(join("public", ...dirs));
 
 export const getContentPath = (...dirs: string[]) =>
-  join(serverRuntimeConfig.PROJECT_ROOT, "content", ...dirs);
+  resolve(join("content", ...dirs));
