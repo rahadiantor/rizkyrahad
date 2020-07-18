@@ -7,7 +7,12 @@ import { useGithubJsonForm } from "react-tinacms-github";
 
 import { join, readdir } from "../util/fs";
 
-export default function Home({ file, posts }) {
+export default function Home({
+  file,
+  posts,
+  documentaryFileNames,
+  fileContent,
+}) {
   const formOptions = {
     label: "Home Page",
     fields: [{ name: "title", component: "text" }],
@@ -68,6 +73,10 @@ export default function Home({ file, posts }) {
         ))}
       </main>
 
+      <pre>
+        {JSON.stringify({ documentaryFileNames, fileContent }, null, 2)}
+      </pre>
+
       <style jsx global>{`
         html,
         body {
@@ -98,18 +107,21 @@ export const getStaticProps: GetStaticProps = async function ({
     )
   );
 
+  const fileContent = posts[0];
+
   if (preview) {
     const githubPreviewProps = await getGithubPreviewProps({
       ...previewData,
       fileRelativePath: "content/home.json",
       parse: parseJson,
     });
-    console.log({ githubPreviewProps });
     return {
       ...githubPreviewProps,
       props: {
         ...githubPreviewProps.props,
+        documentaryFileNames,
         posts,
+        fileContent,
       },
     };
   }
