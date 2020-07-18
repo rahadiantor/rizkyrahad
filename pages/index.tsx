@@ -7,6 +7,7 @@ import { getGithubPreviewProps, parseJson } from "next-tinacms-github";
 import { usePlugin } from "tinacms";
 import { useGithubJsonForm } from "react-tinacms-github";
 import { getContentPath } from "../util/getPaths";
+import Link from "next/link";
 
 export default function Home({ file, posts }) {
   const formOptions = {
@@ -24,17 +25,50 @@ export default function Home({ file, posts }) {
       </Head>
 
       <main>
-        <h1 className="title">
-          {/**
-           * Render the title from `home.json`
-           */}
-          {data.title}
-        </h1>
-      </main>
+        <h1 className="title">{data.title}</h1>
+        <span>{data.description}</span>
 
-      {posts.map((post) => (
-        <pre key={post.title}>{JSON.stringify(post, null, 2)}</pre>
-      ))}
+        <ul>
+          <li>
+            <Link href={`/`}>
+              <a>{data.documentaryLabel}</a>
+            </Link>
+          </li>
+          <li>
+            <Link href={`/narrative`}>
+              <a>{data.narrativeLabel}</a>
+            </Link>
+          </li>
+          <li>
+            <Link href={`/about`}>
+              <a>{data.aboutLabel}</a>
+            </Link>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <a href={data.instagramLink}>Instagram</a>
+          </li>
+          <li>
+            <a href={data.linkedinLink}>LinkedIn</a>
+          </li>
+          <li>
+            <a href={data.twitterLink}>Twitter</a>
+          </li>
+          <li>
+            <a href={data.email}>Email</a>
+          </li>
+        </ul>
+
+        {posts.map((post) => (
+          <Link href={`/${post.slug}`}>
+            <a>
+              <pre>{JSON.stringify(post, null, 2)}</pre>
+            </a>
+          </Link>
+        ))}
+      </main>
 
       <style jsx global>{`
         html,
