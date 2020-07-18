@@ -15,5 +15,16 @@ export const getPublicPath = (...dirs: string[]) => {
   return resolvedPath;
 };
 
-export const getContentPath = (...dirs: string[]) =>
-  resolve(join("content", ...dirs));
+export const getContentPath = (...dirs: string[]) => {
+  const resolvedPath = resolve(join("content", ...dirs));
+  const processCwdPath = join(process.cwd(), "content", ...dirs);
+  const resolvedStaticPath = resolve(`../content/${dirs.join("/")}`);
+  const dirnamePath = join(__dirname, "content", ...dirs);
+  console.log({
+    resolvedPath,
+    resolvedStaticPath,
+    processCwdPath,
+    dirnamePath,
+  });
+  return resolvedPath;
+};
