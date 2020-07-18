@@ -8,20 +8,20 @@ import { usePlugin } from "tinacms";
 import { useGithubJsonForm } from "react-tinacms-github";
 import { getPublicPath } from "../util/getPaths";
 
-export default function Narrative({ file }) {
+export default function Documentary({ file }) {
   const formOptions = {
-    label: "Narrative",
+    label: `Documentary: ${file.data.title}`,
     fields: [
       { name: "title", component: "text" },
       { name: "slug", component: "text" },
       { name: "description", component: "textarea" },
       { name: "role", component: "text" },
-      {
-        name: "thumbnail",
-        component: "image",
-        uploadDir: () => getPublicPath(),
-        parse: (fileName) => getPublicPath(fileName),
-      },
+      //   {
+      //     name: "thumbnail",
+      //     component: "image",
+      //     uploadDir: () => getPublicPath("documentary"),
+      //     parse: (fileName) => getPublicPath("documentary", fileName),
+      //   },
     ],
   };
 
@@ -36,6 +36,7 @@ export default function Narrative({ file }) {
       <h1>{data.title}</h1>
       <p>{data.description}</p>
       <b>{data.role}</b>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </>
   );
 }
@@ -45,12 +46,11 @@ export const getStaticProps: GetStaticProps = async function ({
   previewData,
   params,
 }) {
-  const path = `content/narrative/${params.postId}.json`;
-  console.log({ path });
+  const fileRelativePath = `content/documentary/${params.postId}.json`;
   if (preview) {
     return getGithubPreviewProps({
       ...previewData,
-      fileRelativePath: path,
+      fileRelativePath,
       parse: parseJson,
     });
   }
@@ -60,19 +60,19 @@ export const getStaticProps: GetStaticProps = async function ({
       error: null,
       preview: false,
       file: {
-        fileRelativePath: path,
-        data: (await import(`../${path}`)).default,
+        fileRelativePath,
+        data: (await import(`../${fileRelativePath}`)).default,
       },
     },
   };
 };
 
 export const getStaticPaths = async function () {
-  const narratives = fs.readdirSync(
-    join(process.cwd(), "content", "narrative")
+  const documentaries = fs.readdirSync(
+    join(process.cwd(), "content", "documentary")
   );
   return {
-    paths: narratives.map((fileName) => ({
+    paths: documentaries.map((fileName) => ({
       params: {
         postId: fileName.split(".")[0],
       },

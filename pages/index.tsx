@@ -6,6 +6,7 @@ import Head from "next/head";
 import { getGithubPreviewProps, parseJson } from "next-tinacms-github";
 import { usePlugin } from "tinacms";
 import { useGithubJsonForm } from "react-tinacms-github";
+import { getContentPath } from "../util/getPaths";
 
 export default function Home({ file, posts }) {
   const formOptions = {
@@ -57,14 +58,13 @@ export const getStaticProps: GetStaticProps = async function ({
   preview,
   previewData,
 }) {
-  const narrativeFiles = await fs.readdir(
-    join(process.cwd(), "content", "narrative")
-  );
-  const narratives = await Promise.all(
-    narrativeFiles.map((fileName) =>
-      fs.readFile(join(process.cwd(), "content", "narrative", fileName), "utf8")
+  const documentaryFiles = await fs.readdir(getContentPath("documentary"));
+  const documentaries = await Promise.all(
+    documentaryFiles.map((fileName) =>
+      fs.readFile(getContentPath("documentary", fileName), "utf8")
     )
   );
+  const posts = documentaries.map((text) => JSON.parse(text));
 
   if (preview) {
     const githubPreviewProps = await getGithubPreviewProps({
@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps = async function ({
       ...githubPreviewProps,
       props: {
         ...githubPreviewProps.props,
-        posts: narratives.map((text) => JSON.parse(text)),
+        posts,
       },
     };
   }
@@ -90,7 +90,7 @@ export const getStaticProps: GetStaticProps = async function ({
         fileRelativePath: "content/home.json",
         data: (await import("../content/home.json")).default,
       },
-      posts: narratives.map((text) => JSON.parse(text)),
+      posts,
     },
   };
 };
