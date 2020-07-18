@@ -1,5 +1,9 @@
-import fs from "fs/promises";
+import fs from "fs";
+import { promisify } from "util";
 import { join } from "path";
+
+const readdir = promisify(fs.readdir);
+const readFile = promisify(fs.readFile);
 
 import { GetStaticProps } from "next";
 import Head from "next/head";
@@ -8,6 +12,7 @@ import { usePlugin } from "tinacms";
 import { useGithubJsonForm } from "react-tinacms-github";
 import { getContentPath } from "../util/getPaths";
 import Link from "next/link";
+import { promises } from "dns";
 
 export default function Home({ file, posts }) {
   const formOptions = {
@@ -92,10 +97,10 @@ export const getStaticProps: GetStaticProps = async function ({
   preview,
   previewData,
 }) {
-  const documentaryFiles = await fs.readdir(getContentPath("documentary"));
+  const documentaryFiles = await readdir(getContentPath("documentary"));
   const documentaries = await Promise.all(
     documentaryFiles.map((fileName) =>
-      fs.readFile(getContentPath("documentary", fileName), "utf8")
+      readFile(getContentPath("documentary", fileName), "utf8")
     )
   );
   const posts = documentaries.map((text) => JSON.parse(text));

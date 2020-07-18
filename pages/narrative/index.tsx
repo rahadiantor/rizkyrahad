@@ -1,5 +1,9 @@
-import fs from "fs/promises";
+import fs from "fs";
+import { promisify } from "util";
 import { join } from "path";
+
+const readdir = promisify(fs.readdir);
+const readFile = promisify(fs.readFile);
 
 import { GetStaticProps } from "next";
 import Head from "next/head";
@@ -92,10 +96,10 @@ export const getStaticProps: GetStaticProps = async function ({
   preview,
   previewData,
 }) {
-  const narrativeFiles = await fs.readdir(getContentPath("narrative"));
+  const narrativeFiles = await readdir(getContentPath("narrative"));
   const narratives = await Promise.all(
     narrativeFiles.map((fileName) =>
-      fs.readFile(getContentPath("narrative", fileName), "utf8")
+      readFile(getContentPath("narrative", fileName), "utf8")
     )
   );
   const posts = narratives.map((text) => JSON.parse(text));

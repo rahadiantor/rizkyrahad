@@ -1,13 +1,8 @@
-import fs from "fs/promises";
-import { join } from "path";
-
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { getGithubPreviewProps, parseJson } from "next-tinacms-github";
 import { usePlugin } from "tinacms";
 import { useGithubJsonForm } from "react-tinacms-github";
-import { getContentPath } from "../util/getPaths";
-import Link from "next/link";
 
 export default function Home({ file }) {
   const formOptions = {
