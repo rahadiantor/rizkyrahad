@@ -13,7 +13,7 @@ export default function Narrative({ file }) {
     fields: [
       { name: "title", component: "text" },
       { name: "slug", component: "text" },
-      { name: "description", component: "text" },
+      { name: "description", component: "textarea" },
       { name: "role", component: "text" },
     ],
   };
@@ -39,6 +39,7 @@ export const getStaticProps: GetStaticProps = async function ({
   params,
 }) {
   const path = `content/narrative/${params.postId}.json`;
+  console.log({ path });
   if (preview) {
     return getGithubPreviewProps({
       ...previewData,
