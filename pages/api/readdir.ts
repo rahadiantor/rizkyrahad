@@ -23,14 +23,14 @@ async function getContentPaths(...dirs: string[]) {
   const joins = {
     cwd: join(cwd, "content"),
     dirname: join(dirname, "content"),
-    relative: join("..", "..", "content"),
+    relative: join("./content"),
     rootConfig: join(rootConfig, "content"),
   };
 
   const resolves = {
     cwd: resolve(cwd, "content"),
     dirname: resolve(dirname, "content"),
-    relative: resolve("..", "..", "content"),
+    relative: resolve("./content"),
     rootConfig: resolve(rootConfig, "content"),
   };
 
